@@ -1,0 +1,36 @@
+b{
+    color: #333;
+    font-size: 17px;
+}
+textarea{
+    outline: none;
+}
+  .heading {
+    font-size: 20px;
+  }
+  #source {
+    width: 100% !important;
+    background: #cccccc52;
+    height: 50vh;
+    font-size: 15px;
+    resize: vertical;
+  }
+  #input {
+    background: #cccccc52;
+    width: 50%;
+    margin: auto .5rem;
+    height: 17vh;
+    font-size: 17px;
+    resize: none;
+  }
+  #output {
+    background: #cccccc52;
+    width: 100%;
+    margin: auto .5rem;
+    height: 35vh;
+    font-size: 17px;
+    resize: none;
+  }
+  .language {
+    width: 150px;
+  }

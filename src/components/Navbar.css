@@ -1,0 +1,38 @@
+nav {
+    background-color: #10002b;
+    margin: 0;
+  }
+  nav ul {
+    list-style-type: none;
+    display: flex;
+    font-size: 1.7rem;
+    padding: 0.7em;
+    margin-block: 0;
+  }
+  
+  nav ul li {
+    margin-left: 20px;
+    text-shadow: 1px 1px #6f2dbd;
+  }
+  
+  li a {
+    text-decoration: none;
+    /* color: #eeeeff; */
+    color: #b9faf8;
+  }
+  
+  #sitename {
+    color: #6f2dbd;
+    text-shadow: 1px 1px #b298dc;
+    margin-right: 30px;
+  }
+  
+  .text textarea {
+    font-size: 1.2rem;
+    border: none;
+    outline: none;
+    background-color: #f0fff1;
+    color: #070600;
+    padding: 10px;
+  }
+  
