@@ -1,5 +1,17 @@
 import React, { Component } from "react";
 import "./Compiler.css";
+import { io } from "socket.io-client";
+let i = 1;
+const socket = io(`http://localhost:5000`);
+socket.on("connect", () => {
+  console.log(` ${i++} ${socket.id}`);
+});
+
+socket.on("send-client", (msg) => {
+  const code = document.getElementById("source");
+  code.value = msg;
+});
+
 export default class Compiler extends Component {
   constructor(props) {
     super(props);
@@ -92,6 +104,11 @@ export default class Compiler extends Component {
     }
   };
 
+  edit() {
+    const editor = document.getElementById("source");
+    socket.emit("send-server", editor.value);
+  }
+
   render() {
     return (
       <div>
@@ -116,6 +133,14 @@ export default class Compiler extends Component {
               onClick={this.submit}
             >
               <em>Run</em>
+            </button>
+
+            <button
+              type="submit"
+              className="btn btn-info ml-2 mr-2 "
+              onClick={this.edit}
+            >
+              <em>Share</em>
             </button>
             <br></br>
             <label htmlFor="tags" className="mr-1">
