@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import "./Compiler.css";
 import { io } from "socket.io-client";
-let i = 1;
 const socket = io(`http://localhost:5000`);
 socket.on("connect", () => {
-  console.log(` ${i++} ${socket.id}`);
+  console.log(` Connected`);
 });
 
-socket.on("send-client", (msg) => {
+socket.on("message", (msg) => {
   const code = document.getElementById("source");
   code.value = msg;
 });
@@ -106,7 +105,7 @@ export default class Compiler extends Component {
 
   edit() {
     const editor = document.getElementById("source");
-    socket.emit("send-server", editor.value);
+    socket.send(editor.value);
   }
 
   render() {
@@ -126,6 +125,7 @@ export default class Compiler extends Component {
               onChange={this.input}
               className=" source"
               value={this.state.input}
+              onKeyUp={this.edit}
             ></textarea>
             <button
               type="submit"
@@ -135,13 +135,13 @@ export default class Compiler extends Component {
               <em>Run</em>
             </button>
 
-            <button
+            {/* <button
               type="submit"
               className="btn btn-info ml-2 mr-2 "
               onClick={this.edit}
             >
               <em>Share</em>
-            </button>
+            </button> */}
             <br></br>
             <label htmlFor="tags" className="mr-1">
               <b>Language:</b>
