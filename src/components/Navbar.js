@@ -1,28 +1,24 @@
 import "./Navbar.css";
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
-import Login from "./Login";
-import Compiler from "./Compiler";
+import App from "../App";
+import { Navigate } from "react-router-dom";
 function Navbar() {
   return (
     <div>
       <BrowserRouter>
         <ul>
           <li>
-            <h2 id="sitename">Collab Compiler</h2>
+            <Link to={"/"}>
+              <h2 id="sitename">Collab Compiler</h2>
+            </Link>
           </li>
-          <li>
-            <Link to={"/compiler"}>Editor</Link>
-          </li>
-          <li>
-            <Link to={"/login"}>Login</Link>
-          </li>
-          {/* <li>
-            <a href="#">Projects</a>
-          </li> */}
         </ul>
         <Routes>
-          <Route exact path="/compiler" element={<Compiler />}></Route>
-          <Route exact path="/login" element={<Login />}></Route>
+          <Route exact path="/compiler" element={<App />}></Route>
+          <Route
+            path="/redirect"
+            element={<Navigate to={"/compiler"}></Navigate>}
+          />
         </Routes>
       </BrowserRouter>
     </div>

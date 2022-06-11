@@ -3,7 +3,7 @@ import "./Compiler.css";
 import { io } from "socket.io-client";
 const socket = io(`http://localhost:5000`);
 socket.on("connect", () => {
-  console.log(` Connected`);
+  // console.log(` Connected`);
 });
 
 socket.on("message", (msg) => {
@@ -19,7 +19,14 @@ export default class Compiler extends Component {
       output: ``,
       language_id: 2,
       user_input: ``,
+      disable: false,
     };
+    socket.on("lock", () => {
+      this.setState({ disable: true });
+    });
+    socket.on("unlock", () => {
+      this.setState({ disable: false });
+    });
   }
   input = (event) => {
     event.preventDefault();
@@ -89,15 +96,18 @@ export default class Compiler extends Component {
     }
 
     if (jsonGetSolution.stdout) {
-      const output = atob(jsonGetSolution.stdout);
+      const output = Buffer.from(jsonGetSolution.stdout, "base64");
       outputText.innerHTML = "";
       outputText.innerHTML += `Results :\n${output}\nExecution Time : ${jsonGetSolution.time} Secs\nMemory used : ${jsonGetSolution.memory} bytes`;
     } else if (jsonGetSolution.stderr) {
-      const error = atob(jsonGetSolution.stderr);
+      const error = Buffer.from(jsonGetSolution.stderr, "base64");
       outputText.innerHTML = "";
       outputText.innerHTML += `\n Error :${error}`;
     } else {
-      const compilation_error = atob(jsonGetSolution.compile_output);
+      const compilation_error = Buffer.from(
+        jsonGetSolution.compile_output,
+        "base64"
+      );
       outputText.innerHTML = "";
       outputText.innerHTML += `\n Error :${compilation_error}`;
     }
@@ -126,6 +136,7 @@ export default class Compiler extends Component {
               className=" source"
               value={this.state.input}
               onKeyUp={this.edit}
+              disabled={this.state.disable}
             ></textarea>
             <button
               type="submit"
@@ -134,14 +145,26 @@ export default class Compiler extends Component {
             >
               <em>Run</em>
             </button>
-
-            {/* <button
-              type="submit"
-              className="btn btn-info ml-2 mr-2 "
-              onClick={this.edit}
-            >
-              <em>Share</em>
-            </button> */}
+            {this.props.isTeacher ? (
+              <>
+                <button
+                  type="submit"
+                  className="btn btn-info ml-2 mr-2 "
+                  onClick={() => socket.emit("lockreq")}
+                >
+                  <em>lock</em>
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-info ml-2 mr-2 "
+                  onClick={() => socket.emit("unlockreq")}
+                >
+                  <em>unlock</em>
+                </button>
+              </>
+            ) : (
+              <span></span>
+            )}
             <br></br>
             <label htmlFor="tags" className="mr-1">
               <b>Language:</b>
